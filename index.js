@@ -2,9 +2,12 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import dotenv from 'dotenv';
 
 // Routes
-import postRoutes from './routes/posts.js';
+import postRoutes from './routes/routes.js';
+
+dotenv.config();
 
 // Create express app
 const app = express();
@@ -17,12 +20,15 @@ app.use(cors());
 // Setup post routes
 app.use('/posts', postRoutes);
 
-const username = 'rowan';
-const password = 'gshit';
-const CONNECTION_URL = `mongodb+srv://${username}:${password}@memories.yjsod.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const CONNECTION_URL = process.env.CONNECTION_URL;
+console.log(CONNECTION_URL);
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(CONNECTION_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false
+})
   .then(() => {
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
   })
