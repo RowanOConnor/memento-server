@@ -20,6 +20,11 @@ app.use(cors());
 // Setup post routes
 app.use('/posts', postRoutes);
 
+// Landing page route
+app.get('/', (req, res) => {
+  res.send('Hello, welcome to the memories API');
+});
+
 const CONNECTION_URL = process.env.CONNECTION_URL;
 console.log(CONNECTION_URL);
 const PORT = process.env.PORT || 5000;
