@@ -5,7 +5,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 // Routes
-import postRoutes from './routes/routes.js';
+import postRoutes from './routes/postRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(cors());
 
 // Setup post routes
 app.use('/posts', postRoutes);
+app.use('/users', userRoutes);
 
 // Landing page route
 app.get('/', (req, res) => {

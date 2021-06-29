@@ -1,6 +1,9 @@
 import express from 'express';
 
-import { getPosts, createPost, updatePost, deletePost, likePost } from '../controllers/controllers.js';
+import { getPosts, createPost, updatePost, deletePost, likePost } from '../controllers/postsController.js';
+
+// Middleware
+import auth from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -11,21 +14,21 @@ router.route('/')
   .get(getPosts)
 
   // POST /posts
-  .post(createPost);
+  .post(auth, createPost);
 
 // /posts/:id Route
 router.route('/:id')
 
   // PATCH /posts/:id
-  .patch(updatePost)
+  .patch(auth, updatePost)
 
   // DELETE /posts/:id
-  .delete(deletePost);
+  .delete(auth, deletePost);
 
 // /posts/:id/like Route
 router.route('/:id/like')
 
   // PATCH /posts/:id/like
-  .patch(likePost);
+  .patch(auth, likePost);
 
 export default router;
