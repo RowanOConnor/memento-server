@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+
 // Models
 import User from '../models/user.js';
 
@@ -6,7 +8,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 // Auth
-const SECRET = 'test';
+const SECRET = process.env.SECRET;
 
 export const signin = async (req, res) => {
   const { email, password } = req.body;
