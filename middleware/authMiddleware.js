@@ -26,6 +26,7 @@ const auth = async (req, res, next) => {
     // Proceed to next action
     next();
   } catch (error) {
+    res.redirect('/auth');
     console.log(error);
   }
 };
