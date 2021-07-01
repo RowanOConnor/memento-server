@@ -4,11 +4,12 @@ import { getPosts, createPost, updatePost, deletePost, likePost } from '../contr
 
 // Middleware
 import auth from '../middleware/authMiddleware.js';
+import cors from 'cors';
 
 const router = express.Router();
 
 // /posts Route
-router.route('/')
+router.route('/', cors())
 
   // GET /posts
   .get(getPosts)
@@ -17,7 +18,7 @@ router.route('/')
   .post(auth, createPost);
 
 // /posts/:id Route
-router.route('/:id')
+router.route('/:id', cors())
 
   // PATCH /posts/:id
   .patch(auth, updatePost)
@@ -26,7 +27,7 @@ router.route('/:id')
   .delete(auth, deletePost);
 
 // /posts/:id/like Route
-router.route('/:id/like')
+router.route('/:id/like', cors())
 
   // PATCH /posts/:id/like
   .patch(auth, likePost);

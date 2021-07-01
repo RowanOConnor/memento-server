@@ -1,7 +1,6 @@
 // Express, Mongoose, Cross Origin Refs
 import express from 'express';
 import mongoose from 'mongoose';
-import cors from 'cors';
 import dotenv from 'dotenv';
 
 // Routes
@@ -16,7 +15,6 @@ const app = express();
 // Configure express app
 app.use(express.json({ limit: '30mb', extended: true }));
 app.use(express.urlencoded({ limit: '30mb', extended: true }));
-app.use(cors());
 
 // Setup post routes
 app.use('/posts', postRoutes);
