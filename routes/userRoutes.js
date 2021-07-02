@@ -5,13 +5,13 @@ import { signin, signup } from '../controllers/usersController.js';
 const router = express.Router();
 
 // /users/signin Route
-router.route('/signin', cors())
+router.route('/signin')
 
   // POST /users/signin
   .post(signin);
 
 // /users/signup Route
-router.route('/signup', cors())
+router.route('/signup')
 
   // POST /users/signup
   .post(signup);
