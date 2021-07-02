@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { getPosts, createPost, updatePost, deletePost, likePost } from '../controllers/postsController.js';
+import { getPosts, getPostsBySearch, createPost, updatePost, deletePost, likePost } from '../controllers/postsController.js';
 
 // Middleware
 import auth from '../middleware/authMiddleware.js';
@@ -15,6 +15,12 @@ router.route('/')
 
   // POST /posts
   .post(auth, createPost);
+
+// /posts/search Route
+router.route('/search')
+
+  // GET /posts/search
+  .get(getPostsBySearch);
 
 // /posts/:id Route
 router.route('/:id')

@@ -13,6 +13,20 @@ export const getPosts = async (req, res) => {
   }
 }
 
+export const getPostsBySearch = async (req, res) => {
+  const { searchQuery, tags } = req.query;
+
+  try {
+    // Convert to Regex to help MongoDB search more efficiently, case independent
+    const regex = new RegExp(searchQuery, 'i');
+
+    const posts = await Post.find({ $or: [ { title: regex }, { tags: { $in:tags.split(',') } } ] });
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(404).send(error);
+  }
+}
+
 export const createPost = async (req, res) => {
   const post = req.body;
   const newPost = new Post({ ...post, creator: req.userId });
