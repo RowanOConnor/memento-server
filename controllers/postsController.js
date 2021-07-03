@@ -3,13 +3,25 @@ import mongoose from 'mongoose';
 // Models
 import Post from '../models/post.js';
 
+const LIMIT = 6;
+
 // Posts
+export const getPost = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const post = await Post.findById(id);
+    res.status(200).json({ post: post });
+  } catch (error) {
+    res.status(404).send(error);
+  }
+}
+
 export const getPosts = async (req, res) => {
   const { page } = req.query;
 
   try {
     // Limit to 12 posts per page, get start index of first post on given page
-    const LIMIT = 12;
     const startIndex = (Number(page) - 1) * LIMIT;
     const total = await Post.countDocuments();
 
@@ -34,7 +46,6 @@ export const getPostsBySearch = async (req, res) => {
     // Looking for documents matching search query, or with common tags
     const mongoQuery = { $or: [ { title: regex }, { tags: { $in: tags.split(',') } } ] };
 
-    const LIMIT = 12;
     const startIndex = (Number(page) - 1) * LIMIT;
     const total = await Post.countDocuments(mongoQuery);
 
