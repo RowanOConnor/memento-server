@@ -5,23 +5,45 @@ import Post from '../models/post.js';
 
 // Posts
 export const getPosts = async (req, res) => {
+  const { page } = req.query;
+
   try {
-    const posts = await Post.find();
-    res.status(200).json(posts);
+    // Limit to 12 posts per page, get start index of first post on given page
+    const LIMIT = 12;
+    const startIndex = (Number(page) - 1) * LIMIT;
+    const total = await Post.countDocuments();
+
+    const posts = await Post.find().sort({ _id: -1 }).limit(LIMIT).skip(startIndex);
+    res.status(200).json({
+      posts: posts,
+      currentPage: Number(page),
+      numberOfPages: Math.ceil(total / LIMIT)
+    });
   } catch (error) {
     res.status(404).send(error);
   }
 }
 
 export const getPostsBySearch = async (req, res) => {
-  const { searchQuery, tags } = req.query;
+  const { page, q, tags } = req.query;
 
   try {
     // Convert to Regex to help MongoDB search more efficiently, case independent
-    const regex = new RegExp(searchQuery, 'i');
+    const regex = new RegExp(q, 'i');
 
-    const posts = await Post.find({ $or: [ { title: regex }, { tags: { $in:tags.split(',') } } ] });
-    res.status(200).json(posts);
+    // Looking for documents matching search query, or with common tags
+    const mongoQuery = { $or: [ { title: regex }, { tags: { $in: tags.split(',') } } ] };
+
+    const LIMIT = 12;
+    const startIndex = (Number(page) - 1) * LIMIT;
+    const total = await Post.countDocuments(mongoQuery);
+
+    const posts = await Post.find(mongoQuery).sort({ _id: -1 }).limit(LIMIT).skip(startIndex);
+    res.status(200).json({
+      posts: posts,
+      currentPage: Number(page),
+      numberOfPages: Math.ceil(total / LIMIT)
+    });
   } catch (error) {
     res.status(404).send(error);
   }
@@ -33,7 +55,7 @@ export const createPost = async (req, res) => {
 
   try {
     await newPost.save();
-    res.status(201).json(newPost);
+    res.status(201).json({ newPost: newPost });
   } catch (error) {
     res.status(409).send(error);
   }
@@ -49,7 +71,7 @@ export const updatePost = async (req, res) => {
 
   const updatedPost = await Post.findByIdAndUpdate(_id, { ...post, _id: _id }, { new: true });
 
-  res.json(updatedPost);
+  res.status(200).json({ updatedPost: updatedPost });
 }
 
 export const deletePost = async (req, res) => {
@@ -61,7 +83,7 @@ export const deletePost = async (req, res) => {
 
   await Post.findByIdAndRemove(_id);
 
-  res.json({ message: 'Post deleted successfully.' });
+  res.status(200).json({ message: 'Post deleted successfully.' });
 }
 
 export const likePost = async (req, res) => {
@@ -88,5 +110,5 @@ export const likePost = async (req, res) => {
 
   const updatedPost = await Post.findByIdAndUpdate(_id, { likes: post.likes }, { new: true });
 
-  res.json(updatedPost);
+  res.status(200).json({ updatedPost: updatedPost });
 }
