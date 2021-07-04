@@ -13,7 +13,7 @@ dotenv.config();
 // Create express app, CORS enabled for certain routes
 const app = express();
 const allowedOrigins = ['http://localhost:3000',
-                        'https://hardcore-pare-1218aa.netlify.app'];
+                        'https://memento-mern.netlify.app'];
 app.use(cors({
   origin: function(origin, callback) {
     // allow requests with no origin (like mobile apps or curl requests)
