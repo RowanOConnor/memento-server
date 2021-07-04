@@ -5,7 +5,10 @@ const postSchema = mongoose.Schema({
   message: String,
   name: String,
   creator: String,
-  tags: [String],
+  tags: {
+    type: [String],
+    default: []
+  },
   selectedFile: String,
   likes: {
     type: [String],
@@ -14,6 +17,10 @@ const postSchema = mongoose.Schema({
   createdAt: {
     type: Date,
     default: new Date()
+  },
+  comments: {
+    type: [String],
+    default: []
   }
 });
 

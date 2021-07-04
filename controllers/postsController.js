@@ -123,3 +123,19 @@ export const likePost = async (req, res) => {
 
   res.status(200).json({ updatedPost: updatedPost });
 }
+
+export const commentOnPost = async (req, res) => {
+  const { id: _id } = req.params;
+  const { comment } = req.body;
+
+  if (!req.userId) return res.status(401).json({ message: 'Unauthenticated' });
+
+  if (!mongoose.Types.ObjectId.isValid(_id)) {
+    return res.status(404).send('No post with that id');
+  }
+
+  // Add comment to the comments array
+  const updatedPost = await Post.findByIdAndUpdate(_id, { $push: { comments: comment } }, { new: true });
+
+  res.status(200).json({ updatedPost: updatedPost });
+}
